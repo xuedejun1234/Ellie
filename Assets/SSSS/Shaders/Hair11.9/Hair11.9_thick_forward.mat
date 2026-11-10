@@ -41,7 +41,7 @@ Material:
     - _AlphaCutoff: 0.8
     - _SpecularInstensity: 2.1
     - _SpecularScale: 30
-    - _SpecularShift: 0.782
+    - _SpecularShift: 0.215
     - _ThicknessBias: 0.5
     - _ThicknessScale: 0.5
     m_Colors: []

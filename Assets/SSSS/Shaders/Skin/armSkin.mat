@@ -63,14 +63,14 @@ Material:
     m_Ints: []
     m_Floats:
     - _Distort: 1
-    - _IndirIntensity: 1
+    - _IndirIntensity: 0.44
     - _LerpNormalScale: 1
     - _NormalDetailScale: 1.72
     - _NormalScale: 1.69
-    - _RoughnessOffset0: 0.551
-    - _RoughnessOffset1: 0.701
-    - _SpecularScale0: 0.36
-    - _SpecularScale1: 0.63
+    - _RoughnessOffset0: 0.774
+    - _RoughnessOffset1: 0.707
+    - _SpecularScale0: 0.27
+    - _SpecularScale1: 0.86
     - _ThicknessScale: 1
     m_Colors:
     - _TransCol: {r: 1, g: 1, b: 1, a: 1}

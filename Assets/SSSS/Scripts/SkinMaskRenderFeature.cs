@@ -68,7 +68,7 @@ public class SkinMaskRenderFeature : ScriptableRendererFeature
                 shelterdrawSettings.overrideMaterialPassIndex = 1;
                 context.DrawRenderers(renderingData.cullResults, ref shelterdrawSettings, ref shelterFilteringSetting);
 
-                // Hair cards use their own alpha-clipped pass so empty texels do not cover the skin mask.
+                //头发用自己的Clip绘制黑色遮罩
                 var hairShelterDrawSettings = CreateDrawingSettings(m_HairShelterTagId, ref renderingData, sortFlags);
                 hairShelterDrawSettings.perObjectData = PerObjectData.None;
                 context.DrawRenderers(renderingData.cullResults, ref hairShelterDrawSettings,
@@ -86,21 +86,26 @@ public class SkinMaskRenderFeature : ScriptableRendererFeature
             cmd.ReleaseTemporaryRT(skinMaskTargetHandle.id);
         }
     }
-
+    /// <summary>
+    /// 高光pass
+    /// </summary>
     class SpecularRenderPass : ScriptableRenderPass
     {
         private RenderTargetHandle specularTargetHandle;
-        private Material specularMaterial = null;
+        private FilteringSettings headFilteringSetting;
         private FilteringSettings skinFilteringSetting;
         private string m_ProfilerTag = "Specular Draw Pass";
         ShaderTagId m_ShaderTagId = new ShaderTagId("SkinSpecular");
 
         
-        public SpecularRenderPass(RenderQueueRange renderQueueRange, LayerMask layerMask1,
-             Material material)
+        public SpecularRenderPass(RenderQueueRange renderQueueRange, LayerMask headMask, LayerMask skinMask)
+
         {
-            skinFilteringSetting = new FilteringSettings(renderQueueRange, layerMask1);
-            specularMaterial = material;
+            //头部高光
+            headFilteringSetting = new FilteringSettings(renderQueueRange, headMask);
+            //皮肤高光
+            skinFilteringSetting = new FilteringSettings(renderQueueRange, skinMask);
+            
         }
         
         public override void Configure(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)//第二个参数代表规格
@@ -116,11 +121,7 @@ public class SkinMaskRenderFeature : ScriptableRendererFeature
         
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
-            if (specularMaterial == null)
-            {
-                Debug.LogError("specularMaterial is null");
-                return;
-            }
+
             CommandBuffer cmd = CommandBufferPool.Get(m_ProfilerTag);
             using (new ProfilingScope(cmd, new ProfilingSampler(m_ProfilerTag))) //离开代码块时自动结束,定义一条性能分析样本，最主要是给它一个名字
             {
@@ -131,9 +132,8 @@ public class SkinMaskRenderFeature : ScriptableRendererFeature
                 
                 var maskDrawSettings = CreateDrawingSettings(m_ShaderTagId, ref renderingData, sortFlags);
                 // maskDrawSettings.perObjectData = PerObjectData.None;
-                maskDrawSettings.overrideMaterial = specularMaterial;
-                maskDrawSettings.overrideMaterialPassIndex = 1;//高光pass
-                context.DrawRenderers(renderingData.cullResults, ref maskDrawSettings, ref skinFilteringSetting);// 把筛选出的物体绘制到这张纹理上
+                context.DrawRenderers(renderingData.cullResults, ref maskDrawSettings, ref headFilteringSetting);// 把筛选出的物体绘制到这张纹理上
+                context.DrawRenderers(renderingData.cullResults, ref maskDrawSettings, ref skinFilteringSetting);
                 cmd.SetGlobalTexture("_SpecularRendertexture", specularTargetHandle.Identifier());
             }
             
@@ -152,11 +152,13 @@ public class SkinMaskRenderFeature : ScriptableRendererFeature
     
     public LayerMask mask;
     public LayerMask shelter;
+    public LayerMask head;
+    public LayerMask skin;
     private SkinMaskRenderPass skinMaskPass;
     Material skinMaskMaterial;
     
     private SpecularRenderPass specularPass;
-    public Material specularMaterial;
+
     
     public override void Create()
     {
@@ -166,7 +168,7 @@ public class SkinMaskRenderFeature : ScriptableRendererFeature
         skinMaskPass.renderPassEvent = RenderPassEvent.BeforeRenderingOpaques;
         //高光
         
-        specularPass = new SpecularRenderPass(RenderQueueRange.opaque, mask, specularMaterial);
+        specularPass = new SpecularRenderPass(RenderQueueRange.opaque, head, skin);
         specularPass.renderPassEvent = RenderPassEvent.BeforeRenderingOpaques;
     }
 

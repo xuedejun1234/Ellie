@@ -34,7 +34,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AlphaCutoff: 0.298
+    - _AlphaCutoff: 0.82
     - _SpecularInstensity: 1
     - _SpecularScale: 1
     - _SpecularShift: 0

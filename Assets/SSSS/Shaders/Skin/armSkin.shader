@@ -28,8 +28,7 @@ Shader "Unlit/armSkin"
     }
     SubShader
     {
-        ZTest LEqual
-        ZWrite On
+
         Tags
         {
             "RenderPipeline" = "UniversalPipeline"
@@ -78,19 +77,6 @@ Shader "Unlit/armSkin"
                 return o;
             }
         
-        
-        ENDHLSL
-        
-        Pass
-        {
-            Name "Skin"
-            Tags {"LightMode" = "UniversalForward"}
-            HLSLPROGRAM
-            #pragma vertex vert
-            #pragma fragment frag
-            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS
-            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
-            #pragma multi_compile_fragment _ _SHADOWS_SOFT
             
             TEXTURE2D(_AlbedoMap);
             SAMPLER(sampler_AlbedoMap);
@@ -147,7 +133,7 @@ Shader "Unlit/armSkin"
                 half _BlushStrength;
             CBUFFER_END
             
-            half3 TransmissionCal(Light light, half3 albedo, half3 viewDir, half3 normalDir,
+             half3 TransmissionCal(Light light, half3 albedo, half3 viewDir, half3 normalDir,
                 half distort, half thickness,half thicknessScale)
             {
                 float3 transLightDir = normalize(light.direction + normalDir * distort);
@@ -193,6 +179,21 @@ Shader "Unlit/armSkin"
                 half3 kdLast = 1 - Flast;
                 return iblDiffuse * kdLast * albedo.rgb;
             }
+            
+        
+        ENDHLSL
+        
+        Pass
+        {
+            Name "Skin"
+            Tags {"LightMode"= "UniversalForward"}
+            HLSLPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS
+            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
+            #pragma multi_compile_fragment _ _SHADOWS_SOFT
+            
             
             
             half4 frag (v2f i) : SV_Target
@@ -261,61 +262,10 @@ Shader "Unlit/armSkin"
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
             #pragma multi_compile_fragment _ _SHADOWS_SOFT
-            
-            TEXTURE2D(_AlbedoMap);
-            SAMPLER(sampler_AlbedoMap);
-            
-            TEXTURE2D(_NormalMap);
-            SAMPLER(sampler_NormalMap);
-            
-            TEXTURE2D(_NormalDetailMap);
-            SAMPLER(sampler_NormalDetailMap);
-            
-            float _NormalScale;
-            float _NormalDetailScale;
-            
-            TEXTURE2D(_AO);
-            SAMPLER(sampler_AO);
-            
-            TEXTURE2D(_Cavity);
-            SAMPLER(sampler_Cavity);
-            
-            TEXTURE2D(_KeleLUT);
-            SAMPLER(sampler_KeleLUT);
-
-            float _RoughnessOffset0;
-            float _RoughnessOffset1;
-            TEXTURE2D(_Roughness);
-            SAMPLER(sampler_Roughness);
-            
-            float _SpecularScale0;
-            float _SpecularScale1;
-
+           
             
             
-            //F项直接光（UE的拟合函数）
-            half F_Function(half HdotV, half F0)
-            {
-                float fre = exp2((-5.55473 * HdotV - 6.98316) * HdotV);
-                return F0 + (1 - F0) * fre;
-            }
-            //Keleman高光计算
-            struct MyBaseData
-            {
-                half NdotH;
-                half HdotV;
-                half NdotV;
-                half halfLambert;
-            };
-            half3 SkinDirSpecCal(Light light, MyBaseData baseData, half specular0, half specular1, half SpecularScale0, half SpecularScale1)
-            {
-                specular0 = Pow4(2.0 * specular0) * SpecularScale0;
-                specular1 = Pow4(2.0 * specular1) * SpecularScale1;
-                half F = F_Function(baseData.HdotV, 0.028);
-                half3 specCal = (specular0 + specular1) * F * baseData.halfLambert * light.color;
-                return  specCal;
-            }
-            
+           
             half4 frag (v2f i) : SV_Target
             {
                 half3 albedo = SAMPLE_TEXTURE2D(_AlbedoMap, sampler_AlbedoMap, i.uv);

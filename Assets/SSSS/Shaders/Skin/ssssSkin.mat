@@ -85,10 +85,10 @@ Material:
     - _LerpNormalScale: 0.252
     - _NormalDetailScale: 0.82
     - _NormalScale: 1
-    - _RoughnessOffset0: 0.19
-    - _RoughnessOffset1: 0.409
-    - _SpecularScale0: 1.23
-    - _SpecularScale1: 0.99
+    - _RoughnessOffset0: 0.32
+    - _RoughnessOffset1: 0.462
+    - _SpecularScale0: 1.21
+    - _SpecularScale1: 0.76
     - _ThicknessScale: 0.2
     m_Colors:
     - _BlushColor: {r: 1, g: 0.75, b: 0.7, a: 1}
