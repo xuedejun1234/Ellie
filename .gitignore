@@ -1,0 +1,26 @@
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Ll]ogs/
+[Bb]uild/
+[Bb]uilds/
+[Uu]serSettings/
+.vs/
+.idea/
+
+# Unity and IDE generated project files
+*.csproj
+*.sln
+*.sln.DotSettings.user
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# Temporary Codex planning notes in the project root
+/findings.md
+/progress.md
+/task_plan.md
