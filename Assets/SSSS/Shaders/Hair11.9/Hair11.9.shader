@@ -122,7 +122,7 @@ Shader "Unlit/Hair11.9"
         {
             Name "Hair_Opaque"
             Tags{"LightMode"="UniversalForward"}
-            Cull Back
+            Cull Off
             ZWrite On
             ZTest LEqual
             Blend One Zero
@@ -150,9 +150,9 @@ Shader "Unlit/Hair11.9"
         {
             Name "Hair_Transparent"
             Tags{"LightMode"="HairTransparent"}
-            Cull Back
+            Cull Off
             ZWrite Off
-            ZTest Less
+            ZTest LEqual
             Blend SrcAlpha OneMinusSrcAlpha
             
             HLSLPROGRAM

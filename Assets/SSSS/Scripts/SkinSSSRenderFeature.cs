@@ -45,6 +45,7 @@ public class SkinSSSRenderFeature : ScriptableRendererFeature
             cmd.GetTemporaryRT(tempRT0.id, cameraTextureDescriptor, FilterMode.Bilinear);
             cmd.GetTemporaryRT(tempRT1.id, cameraTextureDescriptor, FilterMode.Bilinear);
             //这里将原图像copy到sourceTexture中，后面做叠加使用
+            
             int sourceRT = Shader.PropertyToID("_SourceTexture");
             cmd.GetTemporaryRT(sourceRT, cameraTextureDescriptor);
             

@@ -277,10 +277,10 @@ Shader "Unlit/ssssSkin"
         
         Pass
         {
-            ZWrite Off
+            ZWrite On
             Name "specular"
             Tags {"LightMode" = "SkinSpecular"}
-            Cull back
+            Cull Back
             
             HLSLPROGRAM
             #pragma vertex vert

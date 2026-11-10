@@ -130,7 +130,7 @@ public class SkinMaskRenderFeature : ScriptableRendererFeature
                 var sortFlags = renderingData.cameraData.defaultOpaqueSortFlags;
                 
                 var maskDrawSettings = CreateDrawingSettings(m_ShaderTagId, ref renderingData, sortFlags);
-                maskDrawSettings.perObjectData = PerObjectData.None;
+                // maskDrawSettings.perObjectData = PerObjectData.None;
                 maskDrawSettings.overrideMaterial = specularMaterial;
                 maskDrawSettings.overrideMaterialPassIndex = 1;//高光pass
                 context.DrawRenderers(renderingData.cullResults, ref maskDrawSettings, ref skinFilteringSetting);// 把筛选出的物体绘制到这张纹理上

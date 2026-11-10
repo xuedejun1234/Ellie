@@ -13,7 +13,7 @@ Shader "Hidden/PostProcess/SkinSSS"
         }
         LOD 100
         ZTest LEqual
-        ZWrite On
+        ZWrite Off
         HLSLINCLUDE
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
