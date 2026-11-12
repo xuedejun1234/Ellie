@@ -246,8 +246,8 @@ Shader "Unlit/ssssSkin"
                 //SSS漫反射
                 float3 sssNormal = lerp(baseNormalWS, smooth_Normal, saturate(_LerpNormalScale));
                 half sssHalfLambert = dot(sssNormal, mainLight.direction) * 0.5 + 0.5;//halflambert
-                // half curvature = SAMPLE_TEXTURE2D(_CurvatureMap, sampler_CurvatureMap, i.uv);
-                half curvature = 0.8;
+                half curvature = SAMPLE_TEXTURE2D(_CurvatureMap, sampler_CurvatureMap, i.uv);
+                // half curvature = 0.8;
                 float ao = SAMPLE_TEXTURE2D(_AO, sampler_AO, i.uv);
                 float cavity = SAMPLE_TEXTURE2D(_Cavity, sampler_Cavity, i.uv);
                 half sssAtten = (mainLight.distanceAttenuation * mainLight.shadowAttenuation * ao * cavity * 0.5 + 0.5);//光照衰减
